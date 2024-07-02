@@ -50,3 +50,6 @@ TagManager:
   - name: Message
     uniqueID: 1382289587
     locked: 0
+  - name: Effect1
+    uniqueID: 764941441
+    locked: 0
