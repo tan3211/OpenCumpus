@@ -15,11 +15,20 @@ public class NewBehaviourScript : MonoBehaviour
     public GameObject playerImage; // プレイヤー画像のGameObject
     public GameObject attackEffect; // 攻撃エフェクトのGameObject
     public GameObject enemyImage; // 敵画像のGameObject
+    public Text kaisekiReslut; //形態素解析する言葉
 
     // 各ボタンを格納するための変数
     public Button textButton1;
     public Button textButton2;
     public Button textButton3;
+
+    private List<Button> allButtons;
+    private List<string> buttonTexts = new List<string>
+    {
+        "仮A", "仮B", "仮C", "仮D", "仮E", "仮F", "仮G", "仮H", "仮I", "仮J",
+        "仮K", "仮L", "仮M", "仮N", "仮O", "仮P", "仮Q", "仮R", "仮S", "仮T",
+    };
+    private List<string> usedTexts = new List<string>();
 
     // プレイヤーと敵のステータス
     private int playerHealth = 20;
@@ -50,8 +59,13 @@ public class NewBehaviourScript : MonoBehaviour
         messagePanel.SetActive(false);
         kaisekiPanel.SetActive(false);
         attackEffect.SetActive(false);
-        // パネルを表示する
+        // メッセージパネルを表示する
         Invoke("ActivePanel", 1.5f);
+        // 全てのボタンをリストに追加
+        allButtons = new List<Button> { textButton1, textButton2, textButton3 };
+
+        // 初期のボタンテキストを設定
+        UpdateAllButtonTexts();
 
         // ボタンのクリックイベントを設定
         textButton1.onClick.AddListener(() => OnButtonClicked(textButton1));
@@ -82,6 +96,36 @@ public class NewBehaviourScript : MonoBehaviour
         messagePanel.SetActive(true);
     }
 
+    void UpdateAllButtonTexts()
+    {
+        foreach (Button button in allButtons)
+        {
+            SetRandomButtonText(button);
+        }
+    }
+
+
+    void SetRandomButtonText(Button button)
+    {
+        if (buttonTexts.Count == 0)
+        {
+            // すべてのテキストが使用済みの場合、リストをリセット
+            buttonTexts.AddRange(usedTexts);
+            usedTexts.Clear();
+        }
+
+        // ランダムにテキストを選択
+        int index = Random.Range(0, buttonTexts.Count);
+        string selectedText = buttonTexts[index];
+
+        // ボタンのテキストを設定
+        button.GetComponentInChildren<Text>().text = selectedText;
+
+        // 使用済みリストに移動
+        buttonTexts.RemoveAt(index);
+        usedTexts.Add(selectedText);
+    }
+
     // ボタンがクリックされたときの処理
     void OnButtonClicked(Button button)
     {
@@ -89,6 +133,16 @@ public class NewBehaviourScript : MonoBehaviour
         // 解析パネルを表示
         kaisekiPanel.SetActive(true);
         isKaisekiPanelActive = true;
+
+        // クリックされたボタンのテキストを取得し、kaisekiPanelのテキストに設定
+        Text buttonText = button.GetComponentInChildren<Text>();
+        if (buttonText != null)
+        {
+            kaisekiReslut.text = buttonText.text;
+        }
+
+        // 全てのボタンのテキストを新しいランダムなテキストに更新
+        UpdateAllButtonTexts();
     }
 
     IEnumerator PlayerAttack()
@@ -99,7 +153,7 @@ public class NewBehaviourScript : MonoBehaviour
         Debug.Log("プレイヤーの体力: " + playerHealth);
         if (enemyHealth <= 0)
         {
-            StartCoroutine(FadeOutAndDestroy(enemyImage, GameClear));
+            StartCoroutine(Destroy(enemyImage, GameClear));
         }
         else
         {
@@ -117,14 +171,14 @@ public class NewBehaviourScript : MonoBehaviour
         Debug.Log("敵の体力: " + enemyHealth);
         if (playerHealth <= 0)
         {
-            StartCoroutine(FadeOutAndDestroy(playerImage, GameOver));
+            StartCoroutine(Destroy(playerImage, GameOver));
         }
         yield return new WaitForSeconds(1.0f);
         messagePanel.SetActive(true);
         yield break;
     }
 
-    // プレイヤーの攻撃エフェクトを含むアニメーション
+    // プレイヤーの攻撃アニメーション
     IEnumerator PlayerAttackAnimation()
     {
         // プレイヤーの元の位置を保存
@@ -163,7 +217,7 @@ public class NewBehaviourScript : MonoBehaviour
         playerImage.transform.position = originalPosition;
     }
 
-    // 敵の攻撃エフェクトを含むアニメーション
+    // 敵の攻撃アニメーション
     IEnumerator EnemyAttackAnimation()
     {
         Vector3 originalEnemyPosition = enemyImage.transform.position;
@@ -198,8 +252,8 @@ public class NewBehaviourScript : MonoBehaviour
         enemyImage.transform.position = originalEnemyPosition;
     }
 
-    // フェードアウトアニメーション
-    IEnumerator FadeOutAndDestroy(GameObject characterImage, System.Action onComplete)
+    // 撃破時のアニメーション
+    IEnumerator Destroy(GameObject characterImage, System.Action onComplete)
     {
         float elapsedTime = 0;
         Vector3 originalPosition = characterImage.transform.position;
@@ -212,6 +266,7 @@ public class NewBehaviourScript : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+        characterImage.SetActive(false);
         onComplete();
     }
 
