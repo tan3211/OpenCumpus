@@ -15,7 +15,7 @@ public class NewBehaviourScript : MonoBehaviour
     public GameObject playerImage; // プレイヤー画像のGameObject
     public GameObject attackEffect; // 攻撃エフェクトのGameObject
     public GameObject enemyImage; // 敵画像のGameObject
-    public Text kaisekiReslut; //形態素解析する言葉
+    public Text kaisekiResult; //形態素解析する言葉
 
     // 各ボタンを格納するための変数
     public Button textButton1;
@@ -138,7 +138,7 @@ public class NewBehaviourScript : MonoBehaviour
         Text buttonText = button.GetComponentInChildren<Text>();
         if (buttonText != null)
         {
-            kaisekiReslut.text = buttonText.text;
+            kaisekiResult.text = buttonText.text;
         }
 
         // 全てのボタンのテキストを新しいランダムなテキストに更新
