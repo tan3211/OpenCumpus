@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NewBehaviourScript : MonoBehaviour
+public class GameManager : MonoBehaviour
 {
     public GameObject mainImage; // 画像を持つGameObject
     public Sprite gameOverSpr; // GAME OVER画像
@@ -25,8 +25,9 @@ public class NewBehaviourScript : MonoBehaviour
     private List<Button> allButtons;
     private List<string> buttonTexts = new List<string>
     {
-        "仮A", "仮B", "仮C", "仮D", "仮E", "仮F", "仮G", "仮H", "仮I", "仮J",
-        "仮K", "仮L", "仮M", "仮N", "仮O", "仮P", "仮Q", "仮R", "仮S", "仮T",
+        "応援してるよ！", "君ならできる！", " 諦めないで！", "応援してます！", "君の力を信じて！", "一歩ずつ前進！",
+        "全力で応援！", "笑顔で頑張れ！", "自分を信じて！", "努力は報われる！", "やればできる！", "絶対に成功する！",
+        "その調子で行こう！", "応援してるからね！", "応援の気持ち届け！", "希望を持って！", "ファイト一発！"
     };
     private List<string> usedTexts = new List<string>();
 

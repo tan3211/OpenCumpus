@@ -426,7 +426,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 726627b513cafbd4e8fdbaf466f0613e, type: 3}
     m_FontSize: 64
     m_FontStyle: 0
     m_BestFit: 0
@@ -597,7 +597,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 726627b513cafbd4e8fdbaf466f0613e, type: 3}
     m_FontSize: 45
     m_FontStyle: 0
     m_BestFit: 0
@@ -1384,7 +1384,7 @@ MonoBehaviour:
   playerImage: {fileID: 1024333875}
   attackEffect: {fileID: 1144305372}
   enemyImage: {fileID: 1739095871}
-  kaisekiReslut: {fileID: 1347252448}
+  kaisekiResult: {fileID: 1347252448}
   textButton1: {fileID: 1474618730}
   textButton2: {fileID: 1051134025}
   textButton3: {fileID: 1891341720}
@@ -1522,8 +1522,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
-    m_FontSize: 120
+    m_Font: {fileID: 12800000, guid: 726627b513cafbd4e8fdbaf466f0613e, type: 3}
+    m_FontSize: 70
     m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 0
@@ -1625,7 +1625,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1424044009}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1637,8 +1637,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.6699829, y: 6.0400085}
-  m_SizeDelta: {x: 122.12, y: 65.76}
+  m_AnchoredPosition: {x: 0, y: 4.5700073}
+  m_SizeDelta: {x: 133.68, y: 76.26}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1474618728
 GameObject:
@@ -1677,7 +1677,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: -541.05994, y: -56.879974}
-  m_SizeDelta: {x: 585.38, y: 301.99}
+  m_SizeDelta: {x: 800, y: 301.99}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1474618730
 MonoBehaviour:
@@ -1887,7 +1887,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 726627b513cafbd4e8fdbaf466f0613e, type: 3}
     m_FontSize: 64
     m_FontStyle: 0
     m_BestFit: 0
@@ -2220,8 +2220,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000000029802, y: 276}
-  m_SizeDelta: {x: 1763.61, y: 221.9}
+  m_AnchoredPosition: {x: 0.001339, y: 272.14}
+  m_SizeDelta: {x: 1798.2, y: 245.06}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1826486455
 MonoBehaviour:
@@ -2393,6 +2393,7 @@ GameObject:
   - component: {fileID: 2069878961}
   - component: {fileID: 2069878963}
   - component: {fileID: 2069878962}
+  - component: {fileID: 2069878964}
   m_Layer: 5
   m_Name: Text (Legacy)
   m_TagString: Untagged
@@ -2440,7 +2441,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_Font: {fileID: 12800000, guid: 726627b513cafbd4e8fdbaf466f0613e, type: 3}
     m_FontSize: 64
     m_FontStyle: 0
     m_BestFit: 0
@@ -2461,6 +2462,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2069878960}
   m_CullTransparentMesh: 1
+--- !u!114 &2069878964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2069878960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 2
+  m_VerticalFit: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
