@@ -40,6 +40,7 @@ public class GameManager : MonoBehaviour
 
     private bool isKaisekiPanelActive = false; // 解析パネルが表示されているかどうかを示すフラグ
     private bool isWordsAdded = false; // 単語が追加されたかどうかを示すフラグ
+    private bool canPressSpace = false;
 
     private Vector3 originalPosition; // 元の位置を保持する変数
     public float moveDistance = 0.1f; // 左に移動する距離
@@ -48,7 +49,8 @@ public class GameManager : MonoBehaviour
     public float fadeDuration = 1.5f; // フェードアウトの時間
     public float shakeIntensity = 0.1f; // 振動の強さ
     public float shakeSpeed = 7f; // 振動の速度
-
+    public Image kaisekiResult;
+    public Text keitaiso;
 
     Image titelImage; // 画像を保存しているImageコンポーネント
 
@@ -86,16 +88,34 @@ public class GameManager : MonoBehaviour
         textButton1.onClick.AddListener(() => OnButtonClicked(textButton1));
         textButton2.onClick.AddListener(() => OnButtonClicked(textButton2));
         textButton3.onClick.AddListener(() => OnButtonClicked(textButton3));
+
+        StartCoroutine(EnableSpaceAfterDelay());
+    }
+
+    IEnumerator EnableSpaceAfterDelay()
+    {
+        while (true)
+        {
+            yield return new WaitUntil(() => isKaisekiPanelActive);
+            yield return new WaitForSeconds(3.0f);
+            canPressSpace = true;
+
+            yield return new WaitUntil(() => !isKaisekiPanelActive);
+            canPressSpace = false;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isKaisekiPanelActive && Input.GetKeyDown(KeyCode.Space))
+        if (isKaisekiPanelActive && canPressSpace && Input.GetKeyDown(KeyCode.Space))
         {
             kaisekiPanel.SetActive(false); // パネルを非表示にする
             isKaisekiPanelActive = false; // フラグをリセット
+            keitaiso.text = "";
+            kaisekiResult.sprite = null;
             StartCoroutine(PlayerAttack()); // 攻撃
+            canPressSpace = false;
         }
     }
 

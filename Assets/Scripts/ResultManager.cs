@@ -167,7 +167,7 @@ public class ResultManager : MonoBehaviour
         GetComponent<AudioSource>().Play();
 
         yield return new WaitForSeconds(1.0f);
-        keitaiso.text = $"形態素数：{keitaisoNumber}　　⇒　　攻撃力Xup";
+        keitaiso.text = string.Format("形態素数：{0}　　⇒　　<color=#FF0000>攻撃力 {1} up!</color>", keitaisoNumber, keitaisoNumber);
         GetComponent<AudioSource>().Play();
     }
 

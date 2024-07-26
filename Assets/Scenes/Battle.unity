@@ -653,8 +653,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -769.72, y: 0}
+  m_AnchoredPosition: {x: 0, y: 83.484985}
+  m_SizeDelta: {x: -476.27, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &541938842
 MonoBehaviour:
@@ -707,7 +707,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_AspectMode: 1
-  m_AspectRatio: 1.7777778
+  m_AspectRatio: 6
 --- !u!1 &793034458
 GameObject:
   m_ObjectHideFlags: 0
@@ -1298,8 +1298,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 50, y: -188.75}
-  m_SizeDelta: {x: 546.76, y: 101.21}
+  m_AnchoredPosition: {x: 103, y: -99}
+  m_SizeDelta: {x: 857.4, y: 128.22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1111347160
 MonoBehaviour:
@@ -1323,11 +1323,11 @@ MonoBehaviour:
       m_Calls: []
   m_FontData:
     m_Font: {fileID: 12800000, guid: 726627b513cafbd4e8fdbaf466f0613e, type: 3}
-    m_FontSize: 30
+    m_FontSize: 40
     m_FontStyle: 1
     m_BestFit: 0
-    m_MinSize: 3
-    m_MaxSize: 40
+    m_MinSize: 0
+    m_MaxSize: 50
     m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
@@ -1562,6 +1562,8 @@ MonoBehaviour:
   fadeDuration: 1.5
   shakeIntensity: 0.1
   shakeSpeed: 7
+  kaisekiResult: {fileID: 541938842}
+  keitaiso: {fileID: 1111347160}
 --- !u!114 &1171369675
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2309,8 +2311,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -0.0000040531}
-  m_SizeDelta: {x: 1198.02, y: 524.3}
+  m_AnchoredPosition: {x: 0, y: 17.960009}
+  m_SizeDelta: {x: 1198.02, y: 464.14}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1754782437
 MonoBehaviour:
