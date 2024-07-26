@@ -5,17 +5,18 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
+
     public GameObject mainImage; // 画像を持つGameObject
     public Sprite gameOverSpr; // GAME OVER画像
     public Sprite gameClearSpr; // GAME CLEAR画像
     public GameObject panel; // パネル
     public GameObject messagePanel; // メッセージパネル
     public GameObject kaisekiPanel; // 解析パネル
-    public Sprite KeitaisoKaiseki; // 形態素解析画像
     public GameObject playerImage; // プレイヤー画像のGameObject
     public GameObject attackEffect; // 攻撃エフェクトのGameObject
     public GameObject enemyImage; // 敵画像のGameObject
-    public Text kaisekiResult; //形態素解析する言葉
+    public string kaisekiText;
 
     // 各ボタンを格納するための変数
     public Button textButton1;
@@ -25,9 +26,9 @@ public class GameManager : MonoBehaviour
     private List<Button> allButtons;
     private List<string> buttonTexts = new List<string>
     {
-        "応援してるよ！", "君ならできる！", " 諦めないで！", "応援してます！", "君の力を信じて！", "一歩ずつ前進！",
-        "全力で応援！", "笑顔で頑張れ！", "自分を信じて！", "努力は報われる！", "やればできる！", "絶対に成功する！",
-        "その調子で行こう！", "応援してるからね！", "応援の気持ち届け！", "希望を持って！", "ファイト一発！"
+        "おーえんしてるよ！", "君ならきっとやれる！", "絶対ぜったい諦めるな！", "君の力を信じてるよっ", "いっけえええぇぇぇっ！",
+        "負けないでーーー！", "負けるな勇者さん！", "恐らくなんとかなるさ", "私たちが見守ってるよ！", "ささっとやっつけちゃって！",
+        "めっちゃ応援してま～す", "ユーキャンドゥーイットです！", "雨垂れ石を穿つ。だよ", "(ドキドキドキドキ…)"
     };
     private List<string> usedTexts = new List<string>();
 
@@ -38,6 +39,7 @@ public class GameManager : MonoBehaviour
     private int enemyAttack = 5;
 
     private bool isKaisekiPanelActive = false; // 解析パネルが表示されているかどうかを示すフラグ
+    private bool isWordsAdded = false; // 単語が追加されたかどうかを示すフラグ
 
     private Vector3 originalPosition; // 元の位置を保持する変数
     public float moveDistance = 0.1f; // 左に移動する距離
@@ -49,7 +51,19 @@ public class GameManager : MonoBehaviour
 
 
     Image titelImage; // 画像を保存しているImageコンポーネント
- 
+
+    void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -139,7 +153,14 @@ public class GameManager : MonoBehaviour
         Text buttonText = button.GetComponentInChildren<Text>();
         if (buttonText != null)
         {
-            kaisekiResult.text = buttonText.text;
+            kaisekiText = buttonText.text;
+        }
+
+        if (!isWordsAdded)
+        {
+            buttonTexts.AddRange(new List<string> { "なかなかやるじゃあないか", "すっげぇ。。。", "う～んいい勝負だねー", "どっちが勝つかなあ？" });
+            // フラグを更新して追加処理を二度と実行しないようにする
+            isWordsAdded = true;
         }
 
         // 全てのボタンのテキストを新しいランダムなテキストに更新
@@ -289,5 +310,10 @@ public class GameManager : MonoBehaviour
         panel.SetActive(true); // ボタン(パネル)を表示する
         mainImage.GetComponent<Image>().sprite = gameClearSpr; // 画像を設定する
         Debug.Log("ゲームクリア");
+    }
+
+    public string GetText()
+    {
+        return kaisekiText;
     }
 }
