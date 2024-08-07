@@ -23,6 +23,7 @@ public class ChangeSence : MonoBehaviour
     //ƒV[ƒ“‚ğ“Ç‚İ‚Ş
     public void Load()
     {
-        SceneManager.LoadScene(sceneName);
+        GetComponent<AudioSource>().Play();
+        Initiate.Fade(sceneName, Color.black, 1.0f);
     }
 }
