@@ -39,12 +39,17 @@ public class GameManager : MonoBehaviour
     private List<string> usedTexts = new List<string>();
 
     // プレイヤーと敵のステータス
-    private int maxPlayerHealth = 20;
-    private int currentPlayerHealth = 20;
+    private int maxPlayerHealth = 30;
+    private int currentPlayerHealth = 30;
     private int playerAttack = 3;
-    private int maxEnemyHealth = 10;
-    private int currentEnemyHealth = 10;
+    private int maxEnemyHealth = 52;
+    private int currentEnemyHealth = 52;
     private int enemyAttack = 5;
+
+    public Text attackText; // 攻撃力を表示するためのUIテキスト
+    public ResultManager resultManager; // ResultManager への参照
+    private int currentAttack; // モーション中の現在の攻撃力
+    private int originalAttack; // 元の攻撃力を保存
 
     public Text playerHealthText;
     public Text enemyHealthText;
@@ -110,6 +115,11 @@ public class GameManager : MonoBehaviour
         playerDamageText.gameObject.SetActive(false);
         enemyDamageText.gameObject.SetActive(false);
 
+        // 初期攻撃力でテキストを設定
+        attackText.gameObject.SetActive(false);
+        currentAttack = playerAttack;
+        originalAttack = playerAttack;
+        attackText.text = currentAttack.ToString();
 
         StartCoroutine(EnableSpaceAfterDelay());
     }
@@ -288,15 +298,55 @@ public class GameManager : MonoBehaviour
     // ダメージテキストを一定時間後に非表示にする
     IEnumerator HideDamage(Text damageText)
     {
-        yield return new WaitForSeconds(1.0f);
+        yield return new WaitForSeconds(0.5f);
         damageText.gameObject.SetActive(false);
     }
 
+    private IEnumerator AttackIncrease(int buf)
+    {
+        attackText.gameObject.SetActive(true);
+        float duration = 1.0f;
+        float time = 0;
+        int initialAttack = playerAttack;
+        int finalAttack = playerAttack + buf;
+
+        while (time < duration)
+        {
+            float t = time / duration;
+            int attackIncrease = Mathf.RoundToInt(Mathf.Lerp(0, buf, t));
+
+            // attack と buf の値を更新
+            currentAttack = initialAttack + attackIncrease;
+            int remainingBuf = buf - attackIncrease;
+
+            // テキストを更新(remainingBufが0のときは「+0」を表示しない)
+            if (remainingBuf > 0)
+            {
+                attackText.text = $"{currentAttack} + {remainingBuf}";
+            }
+            else
+            {
+                attackText.text = $"{currentAttack}";
+            }
+
+            // 時間を進める
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        // モーション後の最終的な値を設定
+        playerAttack = finalAttack;
+        attackText.text = $"{playerAttack}";
+        yield return new WaitForSeconds(1.0f);
+    }
 
     IEnumerator PlayerAttack()
     {
         // プレイヤーの攻撃処理
-        StartCoroutine(PlayerAttackAnimation());
+        int buf = resultManager.GetKeitaisoNumber();
+        yield return StartCoroutine(AttackIncrease(buf));  // 攻撃力上昇
+        attackText.gameObject.SetActive(false); // テキストを非表示
+        yield return StartCoroutine(PlayerAttackAnimation()); // 攻撃アニメーションの実行
         currentEnemyHealth -= playerAttack;
         if (currentEnemyHealth < 0)
         {
@@ -319,6 +369,7 @@ public class GameManager : MonoBehaviour
             yield return new WaitForSeconds(1.5f);
             StartCoroutine(EnemyAttack());
         }
+        playerAttack = originalAttack; // 攻撃終了後に元の攻撃力に戻す
     }
 
     IEnumerator EnemyAttack()
@@ -339,9 +390,12 @@ public class GameManager : MonoBehaviour
         {
             StartCoroutine(Destroy(playerImage, GameOver));
         }
-        yield return new WaitForSeconds(1.0f);
-        ActivePanel();
-        yield break;
+        else
+        {
+            yield return new WaitForSeconds(1.0f);
+            ActivePanel();
+            yield break;
+        }
     }
 
     // プレイヤーの攻撃アニメーション

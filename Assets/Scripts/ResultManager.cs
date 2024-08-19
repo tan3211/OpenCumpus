@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class ResultManager : MonoBehaviour
 {
+    public static ResultManager Instance;
+
     public Sprite result1_1;
     public Sprite result1_2;
     public Sprite result2_1;
@@ -47,6 +49,7 @@ public class ResultManager : MonoBehaviour
     public Text blinkText;
     public string kaisekiText;
     public string previousKaisekiText;
+    private int keitaisoNumber;
 
     // Start is called before the first frame update
     void Start()
@@ -162,6 +165,8 @@ public class ResultManager : MonoBehaviour
 
     private IEnumerator ChangeSprite(Sprite newSprite, float delay, int keitaisoNumber)
     {
+        this.keitaisoNumber = keitaisoNumber;
+
         yield return new WaitForSeconds(delay);
         kaisekiResult.sprite = newSprite;
         GetComponent<AudioSource>().Play();
@@ -175,5 +180,11 @@ public class ResultManager : MonoBehaviour
         GetComponent<AudioSource>().Play();
 
         blinkText.gameObject.SetActive(true);
+    }
+
+    public int GetKeitaisoNumber()
+    {
+        // Œ`‘Ô‘f”‚ğ•Ô‚·ˆ—
+        return keitaisoNumber; // —á‚Æ‚µ‚Ä10‚ğ•Ô‚·
     }
 }
