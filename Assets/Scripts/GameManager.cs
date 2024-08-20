@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using DG.Tweening;
 
 public class GameManager : MonoBehaviour
 {
@@ -11,10 +12,7 @@ public class GameManager : MonoBehaviour
     public GaugeController healthGaugeP;
     public GaugeController healthGaugeE;
 
-    public GameObject mainImage; // 画像を持つGameObject
-    public Sprite gameOverSpr; // GAME OVER画像
-    public Sprite gameClearSpr; // GAME CLEAR画像
-    public GameObject panel; // パネル
+    //public GameObject panel; // パネル
     public GameObject messagePanel; // メッセージパネル
     public GameObject kaisekiPanel; // 解析パネル
     public GameObject playerImage; // プレイヤー画像のGameObject
@@ -70,6 +68,20 @@ public class GameManager : MonoBehaviour
     public Image kaisekiResult;
     public Text keitaiso;
 
+    public Image winFade;  // 透明度50%の灰色のImage (UI)
+    public RectTransform winPanel;  // WinPanelのRectTransform
+    public Image winChara;
+    public Image winImage;
+    public Text winMessage;
+    public Button winEndButton;
+
+    public Image loseFade;  // 透明度50%の灰色のImage (UI)
+    public RectTransform losePanel;  // losePanelのRectTransform
+    public Image loseChara;
+    public Image loseImage;
+    public Text loseMessage;
+    public Button loseEndButton;
+
     Image titelImage; // 画像を保存しているImageコンポーネント
 
     void Awake()
@@ -87,13 +99,24 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        // 画像を非表示にする
-        mainImage.SetActive(false);
         // ボタン(パネル)を非表示にする
-        panel.SetActive(false);
         messagePanel.SetActive(false);
         kaisekiPanel.SetActive(false);
         attackEffect.SetActive(false);
+
+        winPanel.gameObject.SetActive(false);
+        winFade.gameObject.SetActive(false);
+        winChara.gameObject.SetActive(false);
+        winImage.gameObject.SetActive(false);
+        winMessage.gameObject.SetActive(false);
+        winEndButton.gameObject.SetActive(false);
+
+        losePanel.gameObject.SetActive(false);
+        loseFade.gameObject.SetActive(false);
+        loseChara.gameObject.SetActive(false);
+        loseImage.gameObject.SetActive(false);
+        loseMessage.gameObject.SetActive(false);
+        loseEndButton.gameObject.SetActive(false);
 
         // カットインアニメーションを開始
         StartCoroutine(PlayCutInAnimation());
@@ -494,19 +517,89 @@ public class GameManager : MonoBehaviour
     void GameOver()
     {
         messagePanel.SetActive(false);
-        mainImage.SetActive(true); // 画像を表示する
-        panel.SetActive(true); // ボタン(パネル)を表示する
-        mainImage.GetComponent<Image>().sprite = gameOverSpr; // 画像を設定する
+        // 画面全体を灰色にフェードする
+        loseFade.gameObject.SetActive(true);
+        losePanel.gameObject.SetActive(true);
+        loseFade.color = new Color(0, 0, 0, 0);  // 最初は透明
+        loseFade.DOFade(0.5f, 1f).OnComplete(() => {
+
+            // loseCharaを左から右へフェードインしながらスライド
+            loseChara.gameObject.SetActive(true);
+            loseChara.color = new Color(1, 1, 1, 0);  // 最初は透明
+            Vector2 loseCharaInitialPos = loseChara.rectTransform.anchoredPosition;  // 現在の位置を取得
+            loseChara.rectTransform.anchoredPosition = new Vector2(loseCharaInitialPos.x - 50, loseCharaInitialPos.y);  // スライド開始位置
+            loseChara.DOFade(1f, 1f);
+            loseChara.rectTransform.DOAnchorPos(loseCharaInitialPos, 1f);  // 元の位置にスライド
+
+            // loseImageとloseMessageを下から上へフェードインしながらスライド
+            loseImage.gameObject.SetActive(true);
+            loseMessage.gameObject.SetActive(true);
+
+            loseImage.color = new Color(1, 1, 1, 0);  // 最初は透明
+            loseMessage.color = new Color(1, 1, 1, 0);  // 最初は透明
+
+            Vector2 loseImageInitialPos = loseImage.rectTransform.anchoredPosition;  // 現在の位置を取得
+            Vector2 loseMessageInitialPos = loseMessage.rectTransform.anchoredPosition;    // 現在の位置を取得
+
+            loseImage.rectTransform.anchoredPosition = new Vector2(loseImageInitialPos.x, loseImageInitialPos.y - 50);  // スライド開始位置
+            loseMessage.rectTransform.anchoredPosition = new Vector2(loseMessageInitialPos.x, loseMessageInitialPos.y - 50);    // スライド開始位置
+
+            loseImage.DOFade(1f, 1f);
+            loseMessage.DOFade(1f, 1f);
+
+            loseImage.rectTransform.DOAnchorPos(loseImageInitialPos, 1f);  // 元の位置にスライド
+            loseMessage.rectTransform.DOAnchorPos(loseMessageInitialPos, 1f);    // 元の位置にスライド
+        });
+
+        // すべてのフェードインが終わった後にloseEndButtonが表示される
+        DOVirtual.DelayedCall(2f, () => {
+            loseEndButton.gameObject.SetActive(true);
+        });
         Debug.Log("ゲームオーバー");
     }
 
     // ゲームクリア時の処理
-    void GameClear()
+    public void GameClear()
     {
         messagePanel.SetActive(false);
-        mainImage.SetActive(true); // 画像を表示する
-        panel.SetActive(true); // ボタン(パネル)を表示する
-        mainImage.GetComponent<Image>().sprite = gameClearSpr; // 画像を設定する
+        // 画面全体を灰色にフェードする
+        winFade.gameObject.SetActive(true);
+        winPanel.gameObject.SetActive(true);
+        winFade.color = new Color(0, 0, 0, 0);  // 最初は透明
+        winFade.DOFade(0.5f, 1f).OnComplete(() => {
+
+            // WinCharaを左から右へフェードインしながらスライド
+            winChara.gameObject.SetActive(true);
+            winChara.color = new Color(1, 1, 1, 0);  // 最初は透明
+            Vector2 winCharaInitialPos = winChara.rectTransform.anchoredPosition;  // 現在の位置を取得
+            winChara.rectTransform.anchoredPosition = new Vector2(winCharaInitialPos.x - 50, winCharaInitialPos.y);  // スライド開始位置
+            winChara.DOFade(1f, 1f);
+            winChara.rectTransform.DOAnchorPos(winCharaInitialPos, 1f);  // 元の位置にスライド
+
+            // WinImageとMessageを下から上へフェードインしながらスライド
+            winImage.gameObject.SetActive(true);
+            winMessage.gameObject.SetActive(true);
+
+            winImage.color = new Color(1, 1, 1, 0);  // 最初は透明
+            winMessage.color = new Color(1, 1, 1, 0);  // 最初は透明
+
+            Vector2 winImageInitialPos = winImage.rectTransform.anchoredPosition;  // 現在の位置を取得
+            Vector2 messageInitialPos = winMessage.rectTransform.anchoredPosition;    // 現在の位置を取得
+
+            winImage.rectTransform.anchoredPosition = new Vector2(winImageInitialPos.x, winImageInitialPos.y - 50);  // スライド開始位置
+            winMessage.rectTransform.anchoredPosition = new Vector2(messageInitialPos.x, messageInitialPos.y - 50);    // スライド開始位置
+
+            winImage.DOFade(1f, 1f);
+            winMessage.DOFade(1f, 1f);
+
+            winImage.rectTransform.DOAnchorPos(winImageInitialPos, 1f);  // 元の位置にスライド
+            winMessage.rectTransform.DOAnchorPos(messageInitialPos, 1f);    // 元の位置にスライド
+        });
+
+        // すべてのフェードインが終わった後にEndButtonが表示される
+        DOVirtual.DelayedCall(2f, () => {
+            winEndButton.gameObject.SetActive(true);
+        });
         Debug.Log("ゲームクリア");
     }
 
