@@ -25,6 +25,7 @@ public class CarouselController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         carouselPanel.SetActive(false); // 起動時にカルーセルPanelを非表示に設定
         UpdateBanners(); // 初期バナーの表示を更新
         leftButton.onClick.AddListener(() => { ShowPreviousBanner(); HighlightButton(leftButton); }); // 左ボタンにクリックイベントを追加
@@ -54,7 +55,7 @@ public class CarouselController : MonoBehaviour
     {
         if (!carouselPanel.activeSelf) // 既に表示されていない場合にのみ表示する
         {
-            audioSource.PlayOneShot(sound1);
+            audioSource.PlayOneShot(sound1, 5.0f);
             carouselPanel.transform.localScale = Vector3.zero; // Panelのスケールをゼロに設定
             carouselPanel.SetActive(true); // Panelをアクティブに設定
             carouselPanel.transform.DOScale(Vector3.one, 0.5f); // DOTweenを使ってPanelを拡大するアニメーション
@@ -64,7 +65,7 @@ public class CarouselController : MonoBehaviour
     // 前のバナーを表示するメソッド
     void ShowPreviousBanner()
     {
-        audioSource.PlayOneShot(sound2);
+        audioSource.PlayOneShot(sound2, 1.5f);
         currentIndex = (currentIndex - 1 + banners.Length) % banners.Length; // インデックスを減少させ、配列の範囲内に収める
         UpdateBanners(); // バナーの表示を更新
     }
@@ -72,7 +73,7 @@ public class CarouselController : MonoBehaviour
     // 次のバナーを表示するメソッド
     void ShowNextBanner()
     {
-        audioSource.PlayOneShot(sound2);
+        audioSource.PlayOneShot(sound2, 1.5f);
         currentIndex = (currentIndex + 1) % banners.Length; // インデックスを増加させ、配列の範囲内に収める
         UpdateBanners(); // バナーの表示を更新
     }
@@ -90,7 +91,7 @@ public class CarouselController : MonoBehaviour
     // カルーセルPanelを非表示にするメソッド
     void CloseCarousel()
     {
-        audioSource.PlayOneShot(sound3);
+        audioSource.PlayOneShot(sound3, 0.15f);
         carouselPanel.transform.DOScale(Vector3.zero, 0.3f).OnComplete(() =>
         {
             carouselPanel.SetActive(false); // アニメーション終了後にPanelを非表示に設定

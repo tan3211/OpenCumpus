@@ -51,6 +51,9 @@ public class ResultManager : MonoBehaviour
     public string previousKaisekiText;
     private int keitaisoNumber;
 
+    public AudioSource audioSource;
+    public AudioClip sound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -67,10 +70,10 @@ public class ResultManager : MonoBehaviour
         if (kaisekiText != previousKaisekiText)
         {
             blinkText.gameObject.SetActive(false);
-            if (kaisekiText == "おーえんしてるよ！")
+            if (kaisekiText == "やるっきゃないでしょ！")
             {
                 kaisekiResult.sprite = result1_1;
-                StartCoroutine(ChangeSprite(result1_2, 1.0f, 7));
+                StartCoroutine(ChangeSprite(result1_2, 1.0f, 5));
             }
             else if (kaisekiText == "君ならきっとやれる！")
             {
@@ -169,15 +172,15 @@ public class ResultManager : MonoBehaviour
 
         yield return new WaitForSeconds(delay);
         kaisekiResult.sprite = newSprite;
-        GetComponent<AudioSource>().Play();
+        audioSource.PlayOneShot(sound, 2.0f);
 
         yield return new WaitForSeconds(1.0f);
         keitaiso.text = $"形態素数：{keitaisoNumber}";
-        GetComponent<AudioSource>().Play();
+        audioSource.PlayOneShot(sound, 2.0f);
 
         yield return new WaitForSeconds(1.0f);
         keitaiso.text = string.Format("形態素数：{0}　　⇒　　<color=#FF0000>攻撃力 {1} up!</color>", keitaisoNumber, keitaisoNumber);
-        GetComponent<AudioSource>().Play();
+        audioSource.PlayOneShot(sound, 2.0f);
 
         blinkText.gameObject.SetActive(true);
     }

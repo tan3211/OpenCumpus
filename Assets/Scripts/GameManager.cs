@@ -30,7 +30,7 @@ public class GameManager : MonoBehaviour
     private List<Button> allButtons;
     private List<string> buttonTexts = new List<string>
     {
-        "おーえんしてるよ！", "君ならきっとやれる！", "絶対ぜったい諦めるな！", "君の力を信じてるよっ", "いっけえええぇぇぇっ！",
+        "やるっきゃないでしょ！", "君ならきっとやれる！", "絶対ぜったい諦めるな！", "君の力を信じてるよっ", "いっけえええぇぇぇっ！",
         "負けないでーーー！", "負けるな勇者さん！", "恐らくなんとかなるさ", "私たちが見守ってるよ！", "ささっとやっつけちゃって！",
         "めっちゃ応援してま～す", "ユーキャンドゥーイットです！", "雨垂れ石を穿つ。だよ", "(ドキドキドキドキ…)"
     };
@@ -82,6 +82,15 @@ public class GameManager : MonoBehaviour
     public Text loseMessage;
     public Button loseEndButton;
 
+    public AudioSource bgm;
+    public AudioSource se;
+    public AudioClip attackSound;
+    public AudioClip fukidashiSound;
+    public AudioClip sentakuSound;
+    public AudioClip startSound;
+    public AudioClip winSound;
+    public AudioClip loseSound;
+
     Image titelImage; // 画像を保存しているImageコンポーネント
 
     void Awake()
@@ -99,6 +108,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         // ボタン(パネル)を非表示にする
         messagePanel.SetActive(false);
         kaisekiPanel.SetActive(false);
@@ -194,6 +204,7 @@ public class GameManager : MonoBehaviour
 
         // スライドインが終了するのを待つ
         yield return new WaitForSeconds(duration);
+        se.PlayOneShot(startSound, 2.0f);
 
         // 3秒間待機
         yield return new WaitForSeconds(3.0f);
@@ -225,14 +236,17 @@ public class GameManager : MonoBehaviour
         textButton2.gameObject.SetActive(false);
         textButton3.gameObject.SetActive(false);
 
-        // 0.2秒間隔でボタンを順次表示
+        // 0.4秒間隔でボタンを順次表示
         yield return new WaitForSeconds(0.4f);
+        se.PlayOneShot(fukidashiSound, 4.0f);
         textButton1.gameObject.SetActive(true);
 
         yield return new WaitForSeconds(0.4f);
+        se.PlayOneShot(fukidashiSound, 4.0f);
         textButton2.gameObject.SetActive(true);
 
         yield return new WaitForSeconds(0.4f);
+        se.PlayOneShot(fukidashiSound, 4.0f);
         textButton3.gameObject.SetActive(true);
     }
 
@@ -275,6 +289,7 @@ public class GameManager : MonoBehaviour
     // ボタンがクリックされたときの処理
     void OnButtonClicked(Button button)
     {
+        se.PlayOneShot(sentakuSound, 1.0f);
         messagePanel.SetActive(false);
         // 解析パネルを表示
         kaisekiPanel.SetActive(true);
@@ -441,6 +456,7 @@ public class GameManager : MonoBehaviour
         // 攻撃エフェクトを表示
         attackEffect.transform.position = enemyImage.transform.position;
         attackEffect.SetActive(true);
+        se.PlayOneShot(attackSound, 2.0f);
 
         // エフェクトの表示時間を待つ
         yield return new WaitForSeconds(effectDuration);
@@ -478,6 +494,7 @@ public class GameManager : MonoBehaviour
         // エフェクトを表示
         attackEffect.transform.position = playerImage.transform.position;
         attackEffect.SetActive(true);
+        se.PlayOneShot(attackSound, 2.0f);
         yield return new WaitForSeconds(effectDuration);
 
         // エフェクトを非表示
@@ -499,6 +516,7 @@ public class GameManager : MonoBehaviour
     IEnumerator Destroy(GameObject characterImage, System.Action onComplete)
     {
         float elapsedTime = 0;
+        float startVolume = bgm.volume;
         Vector3 originalPosition = characterImage.transform.position;
         Image imageComponent = characterImage.GetComponent<Image>();
 
@@ -506,9 +524,14 @@ public class GameManager : MonoBehaviour
         {
             // 振動
             characterImage.transform.position = originalPosition + (Vector3)Random.insideUnitCircle * shakeIntensity * Mathf.Sin(elapsedTime * shakeSpeed);
+            // BGMのフェードアウト
+            bgm.volume = Mathf.Lerp(startVolume, 0, elapsedTime / fadeDuration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
+        // フェードアウト完了後、BGMを停止
+        bgm.Stop();
+        bgm.volume = startVolume; // 音量をリセット
         characterImage.SetActive(false);
         onComplete();
     }
@@ -522,6 +545,8 @@ public class GameManager : MonoBehaviour
         losePanel.gameObject.SetActive(true);
         loseFade.color = new Color(0, 0, 0, 0);  // 最初は透明
         loseFade.DOFade(0.5f, 1f).OnComplete(() => {
+
+            bgm.PlayOneShot(loseSound, 1.0f);
 
             // loseCharaを左から右へフェードインしながらスライド
             loseChara.gameObject.SetActive(true);
@@ -567,6 +592,8 @@ public class GameManager : MonoBehaviour
         winPanel.gameObject.SetActive(true);
         winFade.color = new Color(0, 0, 0, 0);  // 最初は透明
         winFade.DOFade(0.5f, 1f).OnComplete(() => {
+
+            bgm.PlayOneShot(winSound, 1.0f);
 
             // WinCharaを左から右へフェードインしながらスライド
             winChara.gameObject.SetActive(true);
